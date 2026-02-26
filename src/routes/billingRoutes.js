@@ -9,17 +9,18 @@ const {
     deleteBilling
 } = require('../controllers/billingController');
 
+const { protect, restrictTo } = require('../middleware/authMiddleware');
+
 router.route('/')
-    .get(getBillings)
-    .post(createBilling);
+    .get(protect, restrictTo('admin', 'staff'), getBillings)
+    .post(protect, createBilling);
 
 router.route('/paid')
-    .get(getPaidBillings);
+    .get(protect, restrictTo('admin', 'staff'), getPaidBillings);
 
 router.route('/:id')
-
-    .get(getBillingById)
-    .put(updateBilling)
-    .delete(deleteBilling);
+    .get(protect, restrictTo('admin', 'staff'), getBillingById)
+    .put(protect, restrictTo('admin'), updateBilling)
+    .delete(protect, restrictTo('admin'), deleteBilling);
 
 module.exports = router;

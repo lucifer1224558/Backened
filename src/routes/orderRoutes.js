@@ -2,11 +2,13 @@ const express = require('express');
 const router = express.Router();
 const { getOrders, createOrder, updateOrderStatus } = require('../controllers/orderController');
 
+const { protect } = require('../middleware/authMiddleware');
+
 router.route('/')
-    .get(getOrders)
-    .post(createOrder);
+    .get(protect, getOrders)
+    .post(protect, createOrder);
 
 router.route('/:id')
-    .patch(updateOrderStatus);
+    .patch(protect, updateOrderStatus);
 
 module.exports = router;
